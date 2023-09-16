@@ -11,10 +11,6 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 public class OrderApp {
 
   public static void main(String[] args) {
-//    AppConfig appConfig = new AppConfig();
-//    MemberService memberService = appConfig.memberService();
-//    OrderService orderService = appConfig.orderService();
-
     ApplicationContext container = new AnnotationConfigApplicationContext(AppConfig.class);
     MemberService memberService = container.getBean("memberService", MemberService.class);
     OrderService orderService = container.getBean("orderService", OrderService.class);
