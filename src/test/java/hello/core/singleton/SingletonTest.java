@@ -6,6 +6,7 @@ import hello.core.AppConfig;
 import hello.core.member.MemberService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 public class SingletonTest {
 
@@ -30,5 +31,17 @@ public class SingletonTest {
     SingletonService instance2 = SingletonService.getInstance();
 
     assertThat(instance1).isSameAs(instance2);
+  }
+
+  @Test
+  @DisplayName("Spring Container 와 Singleton")
+  void springContainer() {
+    AnnotationConfigApplicationContext container = new AnnotationConfigApplicationContext(
+        AppConfig.class);
+
+    MemberService memberService1 = container.getBean("memberService", MemberService.class);
+    MemberService memberService2 = container.getBean("memberService", MemberService.class);
+
+    assertThat(memberService1).isSameAs(memberService2);
   }
 }
