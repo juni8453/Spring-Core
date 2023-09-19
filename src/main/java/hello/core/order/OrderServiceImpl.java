@@ -4,9 +4,10 @@ import hello.core.discount.DiscountPolicy;
 import hello.core.member.Member;
 import hello.core.member.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
-@RequiredArgsConstructor
 @Component
 public class OrderServiceImpl implements OrderService {
 
@@ -14,6 +15,28 @@ public class OrderServiceImpl implements OrderService {
   // 즉, 외부에서 내부에 구현체를 넣어줘야한다. (AppConfig)
   private final DiscountPolicy discountPolicy;
   private final MemberRepository memberRepository;
+
+  /* 같은 타입 Bean 이 여럿 인 경우 Bean 이름으로 매칭하는 방법
+  @Autowired
+  public OrderServiceImpl(DiscountPolicy rateDiscountPolicy, MemberRepository memberRepository) {
+    this.discountPolicy = rateDiscountPolicy;
+    this.memberRepository = memberRepository;
+  }
+  */
+
+  /* 같은 타입 Bean 이 여럿 인 경우 @Qualifier 이름으로 매칭하는 방법
+  @Autowired
+  public OrderServiceImpl(@Qualifier("mainDiscountPolicy") DiscountPolicy discountPolicy, MemberRepository memberRepository) {
+    this.discountPolicy = discountPolicy;
+    this.memberRepository = memberRepository;
+  }
+  */
+
+  @Autowired
+  public OrderServiceImpl(DiscountPolicy discountPolicy, MemberRepository memberRepository) {
+    this.discountPolicy = discountPolicy;
+    this.memberRepository = memberRepository;
+  }
 
   // 주문 생성 요청 -> 할인을 적용해 새로운 주문 생성 후 반환
   @Override
