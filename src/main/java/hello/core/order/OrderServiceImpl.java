@@ -3,9 +3,7 @@ package hello.core.order;
 import hello.core.discount.DiscountPolicy;
 import hello.core.member.Member;
 import hello.core.member.MemberRepository;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -27,6 +25,13 @@ public class OrderServiceImpl implements OrderService {
   /* 같은 타입 Bean 이 여럿 인 경우 @Qualifier 이름으로 매칭하는 방법
   @Autowired
   public OrderServiceImpl(@Qualifier("mainDiscountPolicy") DiscountPolicy discountPolicy, MemberRepository memberRepository) {
+    this.discountPolicy = discountPolicy;
+    this.memberRepository = memberRepository;
+  }
+
+  @Qualifier("mainDiscountPolicy") DiscountPolicy discountPolicy 대신 직접 만든 어노테이션으로 컴파일시 체크 가능하도록 사용하는 방법
+  @Autowired
+  public OrderServiceImpl(@MainDiscountPolicy DiscountPolicy discountPolicy, MemberRepository memberRepository) {
     this.discountPolicy = discountPolicy;
     this.memberRepository = memberRepository;
   }
