@@ -3,23 +3,17 @@ package hello.core.order;
 import hello.core.discount.DiscountPolicy;
 import hello.core.member.Member;
 import hello.core.member.MemberRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+@RequiredArgsConstructor
 @Component
 public class OrderServiceImpl implements OrderService {
-
-  private final MemberRepository memberRepository;
 
   // 새로운 할인 정책으로 변경하면서 OCP, DIP 를 지키려면 ? -> 인터페이스만 ? -> NPE 발생
   // 즉, 외부에서 내부에 구현체를 넣어줘야한다. (AppConfig)
   private final DiscountPolicy discountPolicy;
-
-  @Autowired
-  public OrderServiceImpl(MemberRepository memberRepository, DiscountPolicy discountPolicy) {
-    this.memberRepository = memberRepository;
-    this.discountPolicy = discountPolicy;
-  }
+  private final MemberRepository memberRepository;
 
   // 주문 생성 요청 -> 할인을 적용해 새로운 주문 생성 후 반환
   @Override
