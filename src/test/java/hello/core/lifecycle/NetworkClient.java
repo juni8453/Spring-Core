@@ -1,5 +1,8 @@
 package hello.core.lifecycle;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
+
 public class NetworkClient {
 
   private String url;
@@ -9,14 +12,14 @@ public class NetworkClient {
   }
 
   // 의존관계 주입이 끝나면 호출하는 초기화 콜백
-  // Bean 설정 파일에 설정돼있는 상태
+  @PostConstruct
   public void init() {
     connect();
     call("초기화 연결 메세지");
   }
 
-  // Spring DI Container 가 종료되기 직전 호 출하는 소멸전 콜백
-  // Bean 설정 파일에 설정돼있는 상태
+  // Spring DI Container 가 종료되기 직전 호출하는 소멸전 콜백
+  @PreDestroy
   public void close() {
     System.out.println("close: " + url);
   }
