@@ -1,9 +1,6 @@
 package hello.core.lifecycle;
 
-import org.springframework.beans.factory.DisposableBean;
-import org.springframework.beans.factory.InitializingBean;
-
-public class NetworkClient implements InitializingBean, DisposableBean {
+public class NetworkClient {
 
   private String url;
 
@@ -12,16 +9,15 @@ public class NetworkClient implements InitializingBean, DisposableBean {
   }
 
   // 의존관계 주입이 끝나면 호출하는 초기화 콜백
-  // 즉, 의존관계 주입 이후 객체 데이터 세팅 시 사용
-  @Override
-  public void afterPropertiesSet() throws Exception {
+  // Bean 설정 파일에 설정돼있는 상태
+  public void init() {
     connect();
     call("초기화 연결 메세지");
   }
 
-  // Spring DI Container 가 종료되기 직전 호출하는 소멸전 콜백
-  @Override
-  public void destroy() throws Exception {
+  // Spring DI Container 가 종료되기 직전 호 출하는 소멸전 콜백
+  // Bean 설정 파일에 설정돼있는 상태
+  public void close() {
     System.out.println("close: " + url);
   }
 
