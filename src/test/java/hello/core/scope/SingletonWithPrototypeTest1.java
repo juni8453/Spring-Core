@@ -4,10 +4,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
+import javax.inject.Provider;
+import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Test;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.Scope;
-import lombok.RequiredArgsConstructor;
 
 public class SingletonWithPrototypeTest1 {
 
@@ -34,19 +35,29 @@ public class SingletonWithPrototypeTest1 {
 
     ClientBean clientBean2 = container.getBean(ClientBean.class);
     int count2 = clientBean2.logic();
-    assertThat(count2).isEqualTo(2);
+    assertThat(count2).isEqualTo(1);
   }
 
   @RequiredArgsConstructor
   @Scope("singleton") /* 생략 가능 */
   static class ClientBean {
 
-    // Singleton Type Bean 에 Prototype Bean 이 의존주입 된 상태
-    // Prototype Bean 은 호출 시점이 아니라 이때 한 번 만들어져서 계속 사용된다.
-      // 원래 의도와 다르게 작동하는 것.
-    private final PrototypeBean prototypeBean;
+    /* 1. ObjectProvider 를 활용해 프로토타입 빈 객체를 조회 -> 생성 -> 의존 주입 -> 초기화 -> 반환 실시
+    private final ObjectProvider<PrototypeBean> prototypeBeanProvider;
 
     public int logic() {
+      PrototypeBean prototypeBean = prototypeBeanProvider.getObject();
+      prototypeBean.addCount();
+      return prototypeBean.getCount();
+    }
+    */
+
+
+    // 2. javax.inject 의 Provider 를 build.gradle 에서 주입받아 사용
+    private final Provider<PrototypeBean> provider;
+
+    public int logic() {
+      PrototypeBean prototypeBean = provider.get();
       prototypeBean.addCount();
       return prototypeBean.getCount();
     }
